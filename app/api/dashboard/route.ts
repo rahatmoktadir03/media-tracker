@@ -21,13 +21,13 @@ export async function GET() {
         mediaByType.find((item) => item.type === MediaType.MOVIE)?._count
           .type || 0,
       totalShows:
-        mediaByType.find((item) => item.type === MediaType.SHOW)?._count.type ||
+        mediaByType.find((item) => item.type === MediaType.TV_SHOW)?._count.type ||
         0,
       totalBooks:
         mediaByType.find((item) => item.type === MediaType.BOOK)?._count.type ||
         0,
       totalGames:
-        mediaByType.find((item) => item.type === MediaType.SHOW)?._count.type ||
+        mediaByType.find((item) => item.type === MediaType.VIDEO_GAME)?._count.type ||
         0,
     };
 
