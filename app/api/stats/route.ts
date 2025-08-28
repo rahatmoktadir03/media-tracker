@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
+
     const watchlistCount = await prisma.watchlistItem.count({
       where: {
         userId: 1, // TODO: Replace with actual user ID
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
+
     const collectionCount = await prisma.collection.count({
       where: {
         userId: 1, // TODO: Replace with actual user ID
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
+
     const tagCount = await prisma.tag.count();
     const reviewCount = await prisma.review.count({
       where: {

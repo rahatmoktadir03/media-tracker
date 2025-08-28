@@ -7,7 +7,6 @@ const DEFAULT_USER_ID = 1;
 
 export async function GET() {
   try {
-    // @ts-expect-error - Prisma types issue, but works at runtime
     const watchlist = await prisma.watchlistItem.findMany({
       where: {
         userId: DEFAULT_USER_ID,
@@ -44,7 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if already in watchlist
-    // @ts-expect-error - Prisma types issue, but works at runtime
+
     const existing = await prisma.watchlistItem.findUnique({
       where: {
         userId_mediaId: {
@@ -62,7 +61,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create watchlist item
-    // @ts-expect-error - Prisma types issue, but works at runtime
+
     const watchlistItem = await prisma.watchlistItem.create({
       data: {
         userId: DEFAULT_USER_ID,
@@ -96,7 +95,6 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
     await prisma.watchlistItem.delete({
       where: {
         userId_mediaId: {
@@ -131,7 +129,6 @@ export async function PATCH(request: NextRequest) {
     if (priority !== undefined) updateData.priority = priority;
     if (notes !== undefined) updateData.notes = notes;
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
     const watchlistItem = await prisma.watchlistItem.update({
       where: {
         userId_mediaId: {

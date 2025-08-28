@@ -5,7 +5,6 @@ const DEFAULT_USER_ID = 1;
 
 export async function GET() {
   try {
-    // @ts-expect-error - Prisma types issue, but works at runtime
     const collections = await prisma.collection.findMany({
       where: {
         userId: DEFAULT_USER_ID,
@@ -53,7 +52,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
     const collection = await prisma.collection.create({
       data: {
         name,
