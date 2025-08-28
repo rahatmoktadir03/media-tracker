@@ -11,7 +11,6 @@ export async function GET(
     const { id } = await params;
     const collectionId = parseInt(id);
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
     const collection = await prisma.collection.findFirst({
       where: {
         id: collectionId,
@@ -62,7 +61,6 @@ export async function PUT(
     const body = await request.json();
     const { name, description } = body;
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
     const collection = await prisma.collection.updateMany({
       where: {
         id: collectionId,
@@ -81,7 +79,6 @@ export async function PUT(
       );
     }
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
     const updatedCollection = await prisma.collection.findUnique({
       where: { id: collectionId },
       include: {
@@ -120,7 +117,6 @@ export async function DELETE(
     const { id } = await params;
     const collectionId = parseInt(id);
 
-    // @ts-expect-error - Prisma types issue, but works at runtime
     const deletedCollection = await prisma.collection.deleteMany({
       where: {
         id: collectionId,
