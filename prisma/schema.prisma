@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  avatar    String?
+  bio       String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  reviews   Review[]
+  favorites Favorite[]
+  watchlist WatchlistItem[]
+  collections Collection[]
+}
+
+model MediaItem {
+  id           Int       @id @default(autoincrement())
+  title        String
+  type         MediaType
+  genre        String?
+  year         Int?
+  director     String?
+  author       String?
+  description  String?
+  poster       String?
+  rating       Float?    // Average rating
+  duration     Int?      // in minutes
+  pages        Int?      // for books
+  seasons      Int?      // for shows
+  episodes     Int?      // for shows
+  status       MediaStatus @default(RELEASED)
+  imdbId       String?
+  tmdbId       String?
+  isbn         String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+  reviews      Review[]
+  favorites    Favorite[]
+  watchlist    WatchlistItem[]
+  collectionItems CollectionItem[]
+  tags         Tag[]
+}
+
+model Review {
+  id         Int       @id @default(autoincrement())
+  rating     Int       // 1-10 scale
+  comment    String?
+  isPublic   Boolean   @default(true)
+  userId     Int
+  mediaId    Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  user       User      @relation(fields: [userId], references: [id])
+  mediaItem  MediaItem @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, mediaId])
+}
+
+model Favorite {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  mediaId   Int
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  mediaItem MediaItem @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, mediaId])
+}
+
+model WatchlistItem {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  mediaId   Int
+  priority  Priority  @default(MEDIUM)
+  notes     String?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  mediaItem MediaItem @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, mediaId])
+}
+
+model Collection {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  isPublic    Boolean   @default(false)
+  userId      Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
+  items       CollectionItem[]
+}
+
+model CollectionItem {
+  id           Int       @id @default(autoincrement())
+  collectionId Int
+  mediaId      Int
+  order        Int?
+  notes        String?
+  addedAt      DateTime  @default(now())
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  mediaItem    MediaItem  @relation(fields: [mediaId], references: [id])
+  
+  @@unique([collectionId, mediaId])
+}
+
+model Tag {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  color     String?   // hex color
+  createdAt DateTime  @default(now())
+  media     MediaItem[]
+}
+
+enum MediaType {
+  BOOK
+  MOVIE
+  TV_SHOW
+  DOCUMENTARY
+  PODCAST
+  AUDIOBOOK
+  VIDEO_GAME
+  ANIME
+  MANGA
+}
+
+enum MediaStatus {
+  RELEASED
+  UPCOMING
+  IN_PROGRESS
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
