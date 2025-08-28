@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -12,10 +12,10 @@ import { MediaType, MediaFilter, MediaSort } from "@/types";
 
 const mediaTypes = [
   { value: "MOVIE", label: "🎬 Movies", color: "text-red-600" },
-  { value: "SHOW", label: "📺 TV Shows", color: "text-blue-600" },
+  { value: "TV_SHOW", label: "📺 TV Shows", color: "text-blue-600" },
   { value: "BOOK", label: "📚 Books", color: "text-green-600" },
   { value: "DOCUMENTARY", label: "🎞️ Documentaries", color: "text-purple-600" },
-  { value: "GAME", label: "🎮 Games", color: "text-pink-600" },
+  { value: "VIDEO_GAME", label: "🎮 Games", color: "text-pink-600" },
   { value: "ANIME", label: "🎌 Anime", color: "text-orange-600" },
   { value: "MANGA", label: "📖 Manga", color: "text-teal-600" },
   { value: "PODCAST", label: "🎙️ Podcasts", color: "text-yellow-600" },
@@ -32,7 +32,7 @@ const sortOptions = [
   { value: "rating-asc", label: "Rating (Lowest)" },
 ];
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const { results, loading, search, clearResults } = useSearch();
 
@@ -364,5 +364,15 @@ export default function SearchPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={<div className="p-8 text-center">Loading search...</div>}
+    >
+      <SearchPageContent />
+    </Suspense>
   );
 }
